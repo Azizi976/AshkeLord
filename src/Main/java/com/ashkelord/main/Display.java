@@ -1,4 +1,4 @@
-package Main.java.com.ashkelord.main;
+package com.ashkelord.main;
 
 import javax.swing.JFrame;
 import java.awt.Canvas;

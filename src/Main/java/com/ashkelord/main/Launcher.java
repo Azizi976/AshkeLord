@@ -1,4 +1,4 @@
-package Main.java.com.ashkelord.main;
+package com.ashkelord.main;
 
 public class Launcher {
     public static void main(String[] args) {

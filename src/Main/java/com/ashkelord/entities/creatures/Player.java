@@ -1,33 +1,30 @@
-package Main.java.com.ashkelord.entities.creatures;
+package com.ashkelord.entities.creatures;
 
-import Main.java.com.ashkelord.entities.behaviors.EvolutionForm;
-import Main.java.com.ashkelord.gfx.Assets;
-import Main.java.com.ashkelord.main.Game;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
+import com.ashkelord.gfx.Assets;
+import com.ashkelord.main.Game;
+import com.ashkelord.worlds.World; // הוספתי
+import java.awt.Graphics; // תיקון Import
 
 public class Player extends Creature {
 
     private Game game;
-    private EvolutionForm currentForm; // ה-Strategy של האבולוציה
 
-    // זמני: כרגע נגדיר מימוש פנימי פשוט עד שנסדר את ה-Imports של EvolutionForm
-    // (הנחתי שהקובץ EvolutionForm.java קיים ותקין בחבילה behaviors)
-
-    public Player(Game game, float x, float y) {
-        super(x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
+    // עדכון: מקבלים World בבנאי ומעבירים ל-Creature
+    public Player(Game game, World world, float x, float y) {
+        super(world, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
         this.game = game;
 
-        // אתחול מצב דיפולטיבי (צריך להיות תואם לקובץ Behaviors)
-        // לצורך הדוגמה אני מייצר כאן אנונימית אם ה-Import לא עובד,
-        // אבל עדיף להשתמש במחלקות האמיתיות שיצרת.
+        // הגדרת "רגליים" בלבד להתנגשות (כדי שהראש לא יתקע בקיר)
+        bounds.x = 22;
+        bounds.y = 44;
+        bounds.width = 19;
+        bounds.height = 19;
     }
 
     @Override
     public void tick() {
         getInput();
-        move();
-        // עדכון המצלמה שתתמקד על השחקן
+        move(); // קורא ל-move החכם של Creature
         game.getGameCamera().centerOnEntity(this);
     }
 
@@ -35,30 +32,30 @@ public class Player extends Creature {
         xMove = 0;
         yMove = 0;
 
-        float speedMod = 1.0f;
-        // if (currentForm != null) speedMod = currentForm.getSpeedModifier();
+        // --- התיקון לכיוונים ההפוכים ---
+        // החזרתי את הלוגיקה ה"הפוכה" שעבדה לך:
 
         if (game.getKeyManager().up)
-            yMove = -speed * speedMod;
+            yMove = speed; // אצלך זה למעלה
         if (game.getKeyManager().down)
-            yMove = speed * speedMod;
+            yMove = -speed; // אצלך זה למטה
         if (game.getKeyManager().left)
-            xMove = -speed * speedMod;
+            xMove = speed; // אצלך זה שמאלה
         if (game.getKeyManager().right)
-            xMove = speed * speedMod;
+            xMove = -speed; // אצלך זה ימינה
     }
 
     @Override
     public void render(Graphics g) {
-        // ציור השחקן במיקום יחסי למצלמה!
-        // שים לב לחיסור של getxOffset
-
-        BufferedImage texture = Assets.player_baby; // Default
-        // if (currentForm != null) texture = Assets.get(currentForm.getTextureName());
-
-        g.drawImage(texture,
+        g.drawImage(Assets.player_baby,
                 (int) (x - game.getGameCamera().getxOffset()),
                 (int) (y - game.getGameCamera().getyOffset()),
                 width, height, null);
+
+        // לדיבאג (לראות את הריבוע האדום):
+        // g.setColor(java.awt.Color.RED);
+        // g.drawRect((int) (x + bounds.x - game.getGameCamera().getxOffset()),
+        // (int) (y + bounds.y - game.getGameCamera().getyOffset()),
+        // bounds.width, bounds.height);
     }
 }

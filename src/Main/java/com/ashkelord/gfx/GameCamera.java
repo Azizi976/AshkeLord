@@ -1,7 +1,7 @@
-package Main.java.com.ashkelord.gfx;
+package com.ashkelord.gfx;
 
-import Main.java.com.ashkelord.entities.Entity;
-import Main.java.com.ashkelord.main.Game;
+import com.ashkelord.entities.Entity;
+import com.ashkelord.main.Game;
 
 public class GameCamera {
 

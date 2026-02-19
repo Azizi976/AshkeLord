@@ -1,4 +1,4 @@
-package Main.java.com.ashkelord.gfx;
+package com.ashkelord.gfx;
 
 import java.awt.image.BufferedImage;
 

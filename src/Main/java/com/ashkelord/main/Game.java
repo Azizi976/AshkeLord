@@ -1,9 +1,14 @@
-package Main.java.com.ashkelord.main;
+package com.ashkelord.main;
 
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import com.ashkelord.states.State;
+import com.ashkelord.states.GameState;
+import com.ashkelord.states.MenuState; // יצרתי אותו למטה
+import com.ashkelord.input.KeyManager;
+import com.ashkelord.gfx.Assets;
+import com.ashkelord.gfx.GameCamera; // וודא שיש לך את הקובץ הזה
 
-// Main Game Class - The Heart of the Engine
 public class Game implements Runnable {
 
     private Display display;
@@ -17,8 +22,9 @@ public class Game implements Runnable {
     private State gameState;
     private State menuState;
 
-    // Input
+    // Input & Camera
     private KeyManager keyManager;
+    private GameCamera gameCamera; // הוספתי
 
     public Game(String title, int width, int height) {
         this.width = width;
@@ -30,19 +36,19 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, width, height);
         display.getFrame().addKeyListener(keyManager);
-
-        // טעינת הנכסים (Singleton) - סאחי אבל יעיל
         Assets.init();
 
-        // אתחול מצבי משחק
+        // מצלמה
+        gameCamera = new GameCamera(this, 0, 0);
+
         gameState = new GameState(this);
         menuState = new MenuState(this);
         State.setState(gameState);
     }
 
-    // The Game Loop (Fixed Time Step)
     @Override
     public void run() {
+        // ... (אותו לוגיקה של FPS כמו קודם)
         init();
         int fps = 60;
         double timePerTick = 1000000000 / fps;
@@ -73,19 +79,48 @@ public class Game implements Runnable {
     private void render() {
         BufferStrategy bs = display.getCanvas().getBufferStrategy();
         if (bs == null) {
-            display.getCanvas().createBufferStrategy(3); // Triple Buffering
+            display.getCanvas().createBufferStrategy(3);
             return;
         }
         Graphics g = bs.getDrawGraphics();
-
-        // Clear Screen
         g.clearRect(0, 0, width, height);
 
-        // Draw State
-        if (State.getState() != null)
+        if (State.getState() != null) {
+            // מעדכן את המצלמה לפני הציור (אם נרצה אפקטים)
             State.getState().render(g);
+        }
 
         bs.show();
         g.dispose();
+    }
+
+    // Getters
+    public KeyManager getKeyManager() {
+        return keyManager;
+    }
+
+    public GameCamera getGameCamera() {
+        return gameCamera;
+    } // קריטי
+
+    public synchronized void start() {
+        if (running)
+            return; // אם כבר רץ, לא לעשות כלום
+
+        running = true;
+        thread = new Thread(this); // "this" זה המחלקה Game שמממשת Runnable
+        thread.start(); // זה קורא לפונקציה run() באופן אוטומטי
+    }
+
+    public synchronized void stop() {
+        if (!running)
+            return;
+
+        running = false;
+        try {
+            thread.join(); // מחכה שהט'רד יסיים בצורה נקייה
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,6 +1,6 @@
-package Main.java.com.ashkelord.tiles;
+package com.ashkelord.tiles;
 
-import Main.java.com.ashkelord.gfx.Assets;
+import com.ashkelord.gfx.Assets;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 

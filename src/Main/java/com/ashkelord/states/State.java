@@ -1,6 +1,6 @@
-package Main.java.com.ashkelord.states;
+package com.ashkelord.states;
 
-import Main.java.com.ashkelord.main.Game;
+import com.ashkelord.main.Game;
 import java.awt.Graphics;
 
 public abstract class State {

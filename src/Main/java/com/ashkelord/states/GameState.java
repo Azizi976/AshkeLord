@@ -1,8 +1,8 @@
-package Main.java.com.ashkelord.states;
+package com.ashkelord.states;
 
-import Main.java.com.ashkelord.entities.creatures.Player;
-import Main.java.com.ashkelord.main.Game;
-import Main.java.com.ashkelord.worlds.World;
+import com.ashkelord.entities.creatures.Player;
+import com.ashkelord.main.Game;
+import com.ashkelord.worlds.World; // ייבוא
 import java.awt.Graphics;
 
 public class GameState extends State {
@@ -12,9 +12,11 @@ public class GameState extends State {
 
     public GameState(Game game) {
         super(game);
-        // יצירת עולם לפני יצירת שחקן (למקרה שנצטרך לבדוק התנגשויות)
+        // יצירת עולם (טוען מפה או יוצר מפת דמה)
         world = new World(game, "res/worlds/world1.txt");
-        player = new Player(game, 100, 100);
+
+        // העברת העולם לשחקן כדי שידע איפה הקירות
+        player = new Player(game, world, 100, 100);
     }
 
     @Override
@@ -25,7 +27,6 @@ public class GameState extends State {
 
     @Override
     public void render(Graphics g) {
-        // קודם מציירים עולם (רקע), אחר כך שחקן (שכבה עליונה)
         world.render(g);
         player.render(g);
     }

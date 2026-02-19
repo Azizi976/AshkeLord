@@ -1,7 +1,7 @@
-package Main.java.com.ashkelord.worlds;
+package com.ashkelord.worlds;
 
-import Main.java.com.ashkelord.main.Game;
-import Main.java.com.ashkelord.tiles.Tile;
+import com.ashkelord.main.Game;
+import com.ashkelord.tiles.Tile;
 import java.awt.Graphics;
 
 public class World {
