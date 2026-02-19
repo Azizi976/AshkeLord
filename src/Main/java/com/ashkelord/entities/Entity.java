@@ -55,4 +55,9 @@ public abstract class Entity {
     public void setHeight(int height) {
         this.height = height;
     }
+
+    public Rectangle getCollisionBounds(float xOffset, float yOffset) {
+        return new Rectangle((int) (x + bounds.x + xOffset), (int) (y + bounds.y + yOffset), bounds.width,
+                bounds.height);
+    }
 }

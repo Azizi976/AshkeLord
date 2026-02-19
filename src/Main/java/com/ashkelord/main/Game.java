@@ -3,11 +3,12 @@ package com.ashkelord.main;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import com.ashkelord.states.State;
-import com.ashkelord.states.GameState;
+import com.ashkelord.states.PrologueState;
 import com.ashkelord.states.MenuState; // יצרתי אותו למטה
 import com.ashkelord.input.KeyManager;
 import com.ashkelord.gfx.Assets;
 import com.ashkelord.gfx.GameCamera; // וודא שיש לך את הקובץ הזה
+import com.ashkelord.ui.UIManager; // וודא שיש לך את הקובץ הזה
 
 public class Game implements Runnable {
 
@@ -22,9 +23,10 @@ public class Game implements Runnable {
     private State gameState;
     private State menuState;
 
-    // Input & Camera
+    // Input, Camera & UI
     private KeyManager keyManager;
-    private GameCamera gameCamera; // הוספתי
+    private GameCamera gameCamera;
+    private UIManager uiManager; // הוספתי
 
     public Game(String title, int width, int height) {
         this.width = width;
@@ -39,11 +41,14 @@ public class Game implements Runnable {
         Assets.init();
 
         // מצלמה
+        // Camera
         gameCamera = new GameCamera(this, 0, 0);
 
-        gameState = new GameState(this);
-        menuState = new MenuState(this);
-        State.setState(gameState);
+        // UI Manager
+        uiManager = new UIManager(width, height);
+
+        // Start with the prologue intro
+        State.setState(new PrologueState(this));
     }
 
     @Override
@@ -74,6 +79,8 @@ public class Game implements Runnable {
         keyManager.tick();
         if (State.getState() != null)
             State.getState().tick();
+        if (uiManager != null)
+            uiManager.tick();
     }
 
     private void render() {
@@ -101,6 +108,10 @@ public class Game implements Runnable {
 
     public GameCamera getGameCamera() {
         return gameCamera;
+    }
+
+    public UIManager getUIManager() {
+        return uiManager;
     } // קריטי
 
     public synchronized void start() {

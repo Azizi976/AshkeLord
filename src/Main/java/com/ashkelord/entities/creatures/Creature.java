@@ -80,8 +80,15 @@ public abstract class Creature extends Entity {
         return world.getTile(x, y).isSolid();
     }
 
-    // פונקציית עזר לעתיד
+    // Entity Collision Check
     public boolean checkEntityCollisions(float xOffset, float yOffset) {
+        for (Entity e : world.getEntityManager().getEntities()) {
+            if (e.equals(this))
+                continue;
+            if (e.getCollisionBounds(0f, 0f).intersects(getCollisionBounds(xOffset, yOffset))) {
+                return true;
+            }
+        }
         return false;
     }
 
