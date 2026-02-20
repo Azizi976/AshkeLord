@@ -13,10 +13,12 @@ import java.util.List;
 public class EntityManager {
 
     private List<Entity> entities;
+    private List<Entity> entitiesToAdd; // Deferred addition queue
     private Comparator<Entity> renderSorter;
 
     public EntityManager() {
         entities = new ArrayList<>();
+        entitiesToAdd = new ArrayList<>();
 
         // Sort by bottom edge (y + height) for proper depth/Z-ordering
         renderSorter = (a, b) -> {
@@ -33,6 +35,15 @@ public class EntityManager {
         while (it.hasNext()) {
             Entity e = it.next();
             e.tick();
+            if (!e.isActive()) {
+                it.remove();
+            }
+        }
+        
+        // Flush new entities
+        if (!entitiesToAdd.isEmpty()) {
+            entities.addAll(entitiesToAdd);
+            entitiesToAdd.clear();
         }
     }
 
@@ -45,11 +56,12 @@ public class EntityManager {
     }
 
     public void addEntity(Entity e) {
-        entities.add(e);
+        entitiesToAdd.add(e);
     }
 
     public void removeEntity(Entity e) {
-        entities.remove(e);
+        // Just mark inactive, let tick cleanup
+        e.setActive(false);
     }
 
     public List<Entity> getEntities() {

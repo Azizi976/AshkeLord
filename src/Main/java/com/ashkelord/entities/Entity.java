@@ -8,6 +8,7 @@ public abstract class Entity {
     protected float x, y;
     protected int width, height;
     protected Rectangle bounds; // ה-Hitbox (קופסת ההתנגשות)
+    protected boolean active = true;
 
     public Entity(float x, float y, int width, int height) {
         this.x = x;
@@ -22,6 +23,10 @@ public abstract class Entity {
     public abstract void tick();
 
     public abstract void render(Graphics g);
+    
+    public void interact() {
+        // Default: do nothing
+    }
 
     // Getters & Setters
     public float getX() {
@@ -59,5 +64,13 @@ public abstract class Entity {
     public Rectangle getCollisionBounds(float xOffset, float yOffset) {
         return new Rectangle((int) (x + bounds.x + xOffset), (int) (y + bounds.y + yOffset), bounds.width,
                 bounds.height);
+    }
+    
+    public boolean isActive() {
+        return active;
+    }
+    
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

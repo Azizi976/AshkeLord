@@ -19,18 +19,30 @@ public class DialogBox {
     private static final Font DIALOG_FONT = new Font("Monospaced", Font.BOLD, 18);
 
     private int screenWidth, screenHeight;
-    private String currentText;
+    private String[] currentDialogues;
+    private int currentDialogueIndex = 0;
     private boolean active;
+
 
     public DialogBox(int screenWidth, int screenHeight) {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
-        this.currentText = "";
         this.active = false;
     }
 
     public void tick() {
-        // Future: text typewriter animation, input handling to advance/close
+        if (!active) return;
+    }
+    
+    // Call this when Enter is pressed
+    public void advance() {
+        if (!active) return;
+        
+        currentDialogueIndex++;
+        if (currentDialogueIndex >= currentDialogues.length) {
+            hide();
+            active = false;
+        }
     }
 
     public void render(Graphics g) {
@@ -57,10 +69,13 @@ public class DialogBox {
         // Draw text
         g.setColor(Color.BLACK);
         g.setFont(DIALOG_FONT);
-        drawWrappedText(g, currentText,
+        
+        if (currentDialogues != null && currentDialogueIndex < currentDialogues.length) {
+             drawWrappedText(g, currentDialogues[currentDialogueIndex],
                 boxX + TEXT_PADDING,
                 boxY + TEXT_PADDING + 18,
                 boxWidth - (TEXT_PADDING * 2));
+        }
     }
 
     /**
@@ -90,21 +105,21 @@ public class DialogBox {
 
     // --- Controls ---
 
-    public void show(String text) {
-        this.currentText = text;
+    public void show(String[] dialogues) {
+        this.currentDialogues = dialogues;
+        this.currentDialogueIndex = 0;
         this.active = true;
+    }
+    
+    public void show(String text) {
+        show(new String[]{text});
     }
 
     public void hide() {
         this.active = false;
-        this.currentText = "";
     }
 
     public boolean isActive() {
         return active;
-    }
-
-    public String getCurrentText() {
-        return currentText;
     }
 }

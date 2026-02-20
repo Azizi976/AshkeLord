@@ -93,9 +93,10 @@ public class Car extends Creature {
 
     @Override
     protected boolean collisionWithTile(int x, int y) {
-        // Cars only drive on Road (ID 3)
+        // Cars only drive on Road (ID 3), Horizontal Road (ID 16), or Intersection (ID 17)
         if (x < 0 || x >= world.getWidth() || y < 0 || y >= world.getHeight())
             return true;
-        return world.getTile(x, y).getId() != 3;
+        int id = world.getTile(x, y).getId();
+        return id != 3 && id != 16 && id != 17;
     }
 }

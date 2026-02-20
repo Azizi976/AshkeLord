@@ -1,0 +1,41 @@
+    private static void drawLiranDown(Graphics2D g, int ox, int oy) {
+        // Liran: The Final Boss
+        // Spiky Hair
+        g.setColor(LIRAN_HAIR);
+        fill(g, ox + 10, oy + 2, 12, 6);
+        fill(g, ox + 14, oy + 1, 4, 2); // Spikes
+        
+        // Skin
+        g.setColor(LIRAN_SKIN);
+        fill(g, ox + 10, oy + 8, 12, 7);
+        
+        // Sunglasses
+        g.setColor(Color.BLACK);
+        fill(g, ox + 11, oy + 11, 4, 2);
+        fill(g, ox + 17, oy + 11, 4, 2);
+        g.drawLine(ox + 15, oy + 12, ox + 17, oy + 12);
+        
+        // Shirt (Tight Black Tee)
+        g.setColor(LIRAN_SHIRT);
+        fill(g, ox + 9, oy + 15, 14, 9);
+        
+        // Arms (Muscular)
+        g.setColor(LIRAN_SKIN);
+        fill(g, ox + 6, oy + 15, 3, 7);
+        fill(g, ox + 23, oy + 15, 3, 7);
+        
+        // Heavy Gold Chain
+        g.setColor(GOLD);
+        fill(g, ox + 12, oy + 16, 8, 2);
+        fill(g, ox + 14, oy + 18, 4, 2);
+        
+        // Pants
+        g.setColor(LIRAN_PANTS);
+        fill(g, ox + 10, oy + 24, 5, 7);
+        fill(g, ox + 17, oy + 24, 5, 7);
+        
+        // Shoes (Fancy White Sneakers)
+        g.setColor(Color.WHITE);
+        fill(g, ox + 10, oy + 31, 5, 1);
+        fill(g, ox + 17, oy + 31, 5, 1);
+    }

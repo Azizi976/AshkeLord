@@ -34,7 +34,8 @@ public class Display {
         canvas.setMaximumSize(new Dimension(width, height));
         canvas.setMinimumSize(new Dimension(width, height));
         // חשוב: מאפשר לקנבס לקבל פוקוס (לקליטת מקלדת)
-        canvas.setFocusable(false);
+        canvas.setFocusable(true);
+        canvas.setFocusTraversalKeysEnabled(false);
 
         frame.add(canvas);
         frame.pack(); // מכווץ את ה-Frame בדיוק לגודל ה-Canvas

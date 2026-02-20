@@ -22,6 +22,19 @@ public class HUD {
 
         // Nervim (Red)
         drawTextWithOutline(g, "Nervim: " + player.getNervim(), 20, 60, new Color(0xFF, 0x40, 0x40), Color.BLACK);
+
+        // Charisma (Blue)
+        drawTextWithOutline(g, "Charisma: " + player.getCharisma(), 20, 90, new Color(0x40, 0xA0, 0xFF), Color.BLACK);
+
+        // Evolution Form (Magenta)
+        String formName = player.getCurrentForm().getSpecialMoveName();
+        drawTextWithOutline(g, "Form: " + (player.hasEvolved() ? "Intermediate Ars" : "Baby Ars"), 
+                20, 120, new Color(0xDD, 0x40, 0xDD), Color.BLACK);
+        
+        // Speed buff indicator
+        if (player.hasSpeedBuff()) {
+            drawTextWithOutline(g, "☕ SPEED BOOST!", 20, 150, new Color(0x40, 0xFF, 0x80), Color.BLACK);
+        }
     }
 
     private void drawTextWithOutline(Graphics g, String text, int x, int y, Color c, Color outline) {

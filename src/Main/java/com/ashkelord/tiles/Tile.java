@@ -22,6 +22,16 @@ public class Tile {
     // New wall variants
     public static Tile wallWindowTile = new SolidTile(Assets.wall_window, 8);
     public static Tile wallDoorTile = new SolidTile(Assets.wall_door, 9);
+    
+    // Ashkelon Specific Tiles
+    public static Tile palmTreeTile = new SolidTile(Assets.palm_tree, 10);
+    public static Tile cactusTile = new SolidTile(Assets.sabra_cactus, 11);
+    public static Tile trashCanTile = new SolidTile(Assets.trash_can, 12);
+    public static Tile plasticChairTile = new SolidTile(Assets.plastic_chair, 13);
+    public static Tile sheshbeshTile = new Tile(Assets.sheshbesh, 14);
+    public static Tile bougainvilleaTile = new SolidTile(Assets.bougainvillea, 15);
+    public static Tile roadHTile = new Tile(Assets.road_h, 16);
+    public static Tile intersectionRoadTile = new Tile(Assets.intersection_road, 17);
 
     public static final int TILEWIDTH = 64, TILEHEIGHT = 64;
 

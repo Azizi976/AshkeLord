@@ -14,9 +14,8 @@ public abstract class Creature extends Entity {
     protected int health;
     protected float speed;
     protected float xMove, yMove;
-    protected World world; // חובה כדי לבדוק קירות!
+    protected World world; 
 
-    // הבנאי חייב לקבל World עכשיו
     public Creature(World world, float x, float y, int width, int height) {
         super(x, y, width, height);
         this.world = world;
@@ -107,5 +106,20 @@ public abstract class Creature extends Entity {
 
     public void setSpeed(float speed) {
         this.speed = speed;
+    }
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public void hurt(int amt) {
+        health -= amt;
+        if (health <= 0) {
+            active = false;
+            die();
+        }
+    }
+
+    public void die() {
+        // Override in subclasses
     }
 }

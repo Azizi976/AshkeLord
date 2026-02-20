@@ -72,12 +72,12 @@ public class SocialNPC extends Creature {
 
     @Override
     protected boolean collisionWithTile(int x, int y) {
-        // Pedestrians shouldn't walk on roads (ID 3)
+        // Pedestrians shouldn't walk on roads (ID 3 or 16)
         if (x < 0 || x >= world.getWidth() || y < 0 || y >= world.getHeight())
             return true;
 
         int id = world.getTile(x, y).getId();
-        if (id == 3)
+        if (id == 3 || id == 16 || id == 17)
             return true; // Avoid roads
 
         return super.collisionWithTile(x, y);

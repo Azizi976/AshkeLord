@@ -43,6 +43,24 @@ public class NPC extends Creature {
                 width, height, null);
     }
 
+    @Override
+    public void interact() {
+        // Simple Interaction for now - later we can hook this to QuestManager
+        System.out.println("Interacting with " + name);
+        // We will need to access GameState to get QuestManager, but for now let's just use Game access if possible
+        // or just print. The actual quest hook will be added in GameState setup or we'll pass QuestManager here.
+        // For the specific assignment, Miri needs to trigger the quest.
+        if (name.equals("Miri Kapara")) {
+             // Hardcoded for the prototype to start the quest logic
+             // Ideally we find the QuestManager from the game instance
+             // But Game class doesn't have quest manager getter yet.
+             // Accessing via State.getState() might be cleaner if we cast to GameState
+             // For now, let's just show a dialogue to prove interaction works 
+             // game.getUIManager().getDialogBox().show("Hello from " + name + "!");
+        }
+    }
+
+
     public String getName() {
         return name;
     }

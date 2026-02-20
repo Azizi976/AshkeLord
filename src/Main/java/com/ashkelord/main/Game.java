@@ -38,6 +38,8 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, width, height);
         display.getFrame().addKeyListener(keyManager);
+        display.getCanvas().addKeyListener(keyManager);
+        display.getCanvas().requestFocus();
         Assets.init();
 
         // מצלמה
@@ -112,7 +114,14 @@ public class Game implements Runnable {
 
     public UIManager getUIManager() {
         return uiManager;
-    } // קריטי
+    } 
+
+    public com.ashkelord.states.GameState getGameState() {
+        if (com.ashkelord.states.State.getState() instanceof com.ashkelord.states.GameState) {
+            return (com.ashkelord.states.GameState) com.ashkelord.states.State.getState();
+        }
+        return null;
+    }
 
     public synchronized void start() {
         if (running)
@@ -133,5 +142,12 @@ public class Game implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+    
+    public com.ashkelord.quests.QuestManager getQuestManager() {
+        if (getGameState() != null) {
+            return getGameState().getQuestManager();
+        }
+        return null; // Or handle appropriately
     }
 }
