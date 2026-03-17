@@ -99,6 +99,24 @@ public class Inventory {
         inventoryItems.add(item);
     }
     
+    /** Remove an item by its ID. Removes the entire stack. */
+    public void removeItem(int itemId) {
+        for (int i = 0; i < inventoryItems.size(); i++) {
+            if (inventoryItems.get(i).getId() == itemId) {
+                inventoryItems.remove(i);
+                return;
+            }
+        }
+    }
+    
+    /** Check if the inventory contains an item with the given ID. */
+    public boolean hasItem(int itemId) {
+        for (Item i : inventoryItems) {
+            if (i.getId() == itemId) return true;
+        }
+        return false;
+    }
+    
     // Getters and Setters
 
     public Game getGame() {

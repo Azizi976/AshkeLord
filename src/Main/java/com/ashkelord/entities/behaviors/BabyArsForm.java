@@ -2,16 +2,25 @@ package com.ashkelord.entities.behaviors;
 
 import java.awt.image.BufferedImage;
 import com.ashkelord.gfx.Assets;
+import com.ashkelord.combat.Attack;
+import com.ashkelord.combat.RangedAttack;
 
 /**
  * The starting evolution form — Baby Ars.
- * Base speed, basic attack.
+ * Base speed, ranged spit attack.
  */
 public class BabyArsForm implements EvolutionForm {
 
+    private final Attack primaryAttack = new RangedAttack("Yarok Spit", 5, 0.5f);
+
     @Override
-    public void attack() {
-        System.out.println("Used Yirika!");
+    public Attack getPrimaryAttack() {
+        return primaryAttack;
+    }
+
+    @Override
+    public Attack getSpecialAttack() {
+        return null; // Not unlocked yet
     }
 
     @Override

@@ -1,22 +1,10 @@
 package com.ashkelord.states;
 
 import com.ashkelord.main.Game;
-import java.awt.Graphics;
+import com.ashkelord.gfx.Renderer;
 
 public abstract class State {
 
-    // --- State Manager (Static) ---
-    private static State currentState = null;
-
-    public static void setState(State state) {
-        currentState = state;
-    }
-
-    public static State getState() {
-        return currentState;
-    }
-
-    // --- Abstract Methods ---
     protected Game game;
 
     public State(Game game) {
@@ -25,5 +13,5 @@ public abstract class State {
 
     public abstract void tick();
 
-    public abstract void render(Graphics g);
+    public abstract void render(Renderer r);
 }

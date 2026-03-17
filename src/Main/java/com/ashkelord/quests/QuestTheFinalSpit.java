@@ -16,6 +16,7 @@ public class QuestTheFinalSpit extends Quest {
     private NPC liranNPC;
     private LiranBoss boss;
     private boolean fightTriggered = false;
+    private boolean victoryTriggered = false;
 
     public QuestTheFinalSpit(Game game) {
         super(game, "The Spitting Duel");
@@ -55,6 +56,13 @@ public class QuestTheFinalSpit extends Quest {
 
     @Override
     public void tick() {
+        // Epilogue transition: runs even after quest is completed
+        // Must be checked BEFORE the state guard below
+        if (victoryTriggered && !game.getUIManager().getDialogBox().isActive()) {
+            game.getStateManager().swap(new com.ashkelord.states.EpilogueState(game));
+            return;
+        }
+        
         if (state != STATE_IN_PROGRESS) return;
 
         if (fightTriggered && !inBossFight && !game.getUIManager().getDialogBox().isActive()) {
@@ -62,30 +70,27 @@ public class QuestTheFinalSpit extends Quest {
             inBossFight = true;
             game.getGameState().loadWorld("/maps/world_boss.txt");
             
-            // Spawn Player & Boss
+            // Get player directly from GameState (persists across world loads)
             World world = game.getGameState().getWorld();
-            Player player = null;
-             for (Entity e : world.getEntityManager().getEntities()) {
-                if (e instanceof Player) {
-                    player = (Player) e;
-                    break;
-                }
-            }
+            Player player = game.getGameState().getPlayer();
             
             if (player != null) {
                 player.setX(10 * 64);
                 player.setY(15 * 64);
             }
             
-            boss = new LiranBoss(game, world, 10 * 64, 5 * 64);
+            boss = new LiranBoss(game, world, 10 * 64, 5 * 64, player);
             world.getEntityManager().addEntity(boss);
+            if (player != null) {
+                game.getGameCamera().centerOnEntity(player);
+            }
             
             game.getUIManager().getDialogBox().show("FIGHT!");
         }
         
         // Win Condition
         if (inBossFight && boss != null) {
-            if (!boss.isActive()) {
+            if (!boss.isActive() && !victoryTriggered) {
                 complete();
             }
         }
@@ -109,14 +114,11 @@ public class QuestTheFinalSpit extends Quest {
     @Override
     protected void onComplete() {
         System.out.println("Boss Defeated!");
+        victoryTriggered = true;
         game.getUIManager().getDialogBox().show(new String[] {
             "Liran: *Cough* ...Not bad... for a periphery kid.",
             "Liran: The Golden Amba... is yours.",
-            "CONGRATULATIONS! YOU HAVE BECOME THE ASHKELORD!",
-            "Credits: Made by Antigravity."
+            "CONGRATULATIONS! YOU HAVE BECOME THE ASHKELORD!"
         });
-        
-        // Teleport back? Or just end game screen?
-        // Let's just leave them in the arena for victory lap
     }
 }

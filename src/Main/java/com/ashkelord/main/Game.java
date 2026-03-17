@@ -1,14 +1,15 @@
 package com.ashkelord.main;
 
-import java.awt.Graphics;
-import java.awt.image.BufferStrategy;
 import com.ashkelord.states.State;
+import com.ashkelord.states.StateManager;
 import com.ashkelord.states.PrologueState;
-import com.ashkelord.states.MenuState; // יצרתי אותו למטה
+import com.ashkelord.states.MenuState;
 import com.ashkelord.input.KeyManager;
 import com.ashkelord.gfx.Assets;
-import com.ashkelord.gfx.GameCamera; // וודא שיש לך את הקובץ הזה
-import com.ashkelord.ui.UIManager; // וודא שיש לך את הקובץ הזה
+import com.ashkelord.gfx.GameCamera;
+import com.ashkelord.gfx.Renderer;
+import com.ashkelord.gfx.AWTRenderer;
+import com.ashkelord.ui.UIManager;
 
 public class Game implements Runnable {
 
@@ -19,14 +20,14 @@ public class Game implements Runnable {
     private boolean running = false;
     private Thread thread;
 
-    // States
-    private State gameState;
-    private State menuState;
+    // State Management
+    private StateManager stateManager;
 
-    // Input, Camera & UI
+    // Input, Camera, UI & Rendering
     private KeyManager keyManager;
     private GameCamera gameCamera;
-    private UIManager uiManager; // הוספתי
+    private UIManager uiManager;
+    private Renderer renderer;
 
     public Game(String title, int width, int height) {
         this.width = width;
@@ -42,15 +43,23 @@ public class Game implements Runnable {
         display.getCanvas().requestFocus();
         Assets.init();
 
-        // מצלמה
+    // Audio — register game sounds
+    com.ashkelord.audio.AudioManager.getInstance().registerSound("bgm_main", "/sounds/Phrygian_Pixel_Palms.wav");
+
         // Camera
         gameCamera = new GameCamera(this, 0, 0);
 
         // UI Manager
         uiManager = new UIManager(width, height);
 
+        // Renderer
+        renderer = new AWTRenderer(display.getCanvas());
+
+        // State Manager (stack-based)
+        stateManager = new StateManager();
+
         // Start with the prologue intro
-        State.setState(new PrologueState(this));
+        stateManager.swap(new PrologueState(this));
     }
 
     @Override
@@ -79,28 +88,18 @@ public class Game implements Runnable {
 
     private void tick() {
         keyManager.tick();
-        if (State.getState() != null)
-            State.getState().tick();
+        stateManager.tick();
         if (uiManager != null)
             uiManager.tick();
     }
 
     private void render() {
-        BufferStrategy bs = display.getCanvas().getBufferStrategy();
-        if (bs == null) {
-            display.getCanvas().createBufferStrategy(3);
-            return;
-        }
-        Graphics g = bs.getDrawGraphics();
-        g.clearRect(0, 0, width, height);
+        if (!renderer.begin()) return;
+        renderer.clear(width, height);
 
-        if (State.getState() != null) {
-            // מעדכן את המצלמה לפני הציור (אם נרצה אפקטים)
-            State.getState().render(g);
-        }
+        stateManager.render(renderer);
 
-        bs.show();
-        g.dispose();
+        renderer.end();
     }
 
     // Getters
@@ -117,10 +116,15 @@ public class Game implements Runnable {
     } 
 
     public com.ashkelord.states.GameState getGameState() {
-        if (com.ashkelord.states.State.getState() instanceof com.ashkelord.states.GameState) {
-            return (com.ashkelord.states.GameState) com.ashkelord.states.State.getState();
+        State current = stateManager.peek();
+        if (current instanceof com.ashkelord.states.GameState) {
+            return (com.ashkelord.states.GameState) current;
         }
         return null;
+    }
+
+    public StateManager getStateManager() {
+        return stateManager;
     }
 
     public synchronized void start() {

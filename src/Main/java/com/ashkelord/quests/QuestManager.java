@@ -16,7 +16,8 @@ public class QuestManager {
 
     public void tick() {
         for (Quest q : quests) {
-            if (q.getState() == 1) { // In Progress
+            int s = q.getState();
+            if (s == 1 || s == 2) { // In Progress or just Completed (for post-completion transitions)
                 q.tick();
             }
         }

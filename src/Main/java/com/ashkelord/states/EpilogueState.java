@@ -12,112 +12,127 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 /**
- * Cinematic prologue intro — classic RPG-style click-through narrative screens.
- * Tells the story of Nadav "The Prince" Biton before gameplay begins.
+ * Cinematic epilogue — classic RPG-style ending screens after defeating Liran.
+ * Mirrors PrologueState's typewriter + gold theme aesthetic.
  */
-public class PrologueState extends State {
+public class EpilogueState extends State {
 
-    // --- Color Palette (Golden Hour / Urban Gritty) ---
-    private static final Color BG_COLOR = new Color(0x1a, 0x1a, 0x2e); // Dark midnight blue
-    private static final Color GOLD = new Color(0xd4, 0xa0, 0x17); // Golden hour
-    private static final Color GOLD_DIM = new Color(0xd4, 0xa0, 0x17, 120); // Faded gold
-    private static final Color TEXT_COLOR = new Color(0xe0, 0xe0, 0xe0); // Light grey body text
-    private static final Color PROMPT_COLOR = new Color(0xff, 0xd7, 0x00); // Bright gold prompt
-    private static final Color SHADOW = new Color(0, 0, 0, 200); // Text shadow
-    private static final Color BG_OVERLAY = new Color(0, 0, 0, 70); // Light overlay on image
+    // --- Color Palette (Golden Hour / Victory) ---
+    private static final Color BG_COLOR = new Color(0x1a, 0x1a, 0x2e);
+    private static final Color GOLD = new Color(0xd4, 0xa0, 0x17);
+    private static final Color GOLD_DIM = new Color(0xd4, 0xa0, 0x17, 120);
+    private static final Color TEXT_COLOR = new Color(0xe0, 0xe0, 0xe0);
+    private static final Color PROMPT_COLOR = new Color(0xff, 0xd7, 0x00);
+    private static final Color SHADOW = new Color(0, 0, 0, 200);
+    private static final Color BG_OVERLAY = new Color(0, 0, 0, 70);
+    private static final Color VICTORY_GOLD = new Color(0xff, 0xd7, 0x00, 200);
 
     // --- Fonts ---
     private static final Font TITLE_FONT = new Font("Serif", Font.BOLD, 36);
     private static final Font SUBTITLE_FONT = new Font("Serif", Font.ITALIC, 18);
     private static final Font BODY_FONT = new Font("Monospaced", Font.PLAIN, 16);
     private static final Font PROMPT_FONT = new Font("Monospaced", Font.BOLD, 14);
+    private static final Font CREDITS_FONT = new Font("Monospaced", Font.PLAIN, 13);
 
     // --- Narrative Slides ---
     private final String[][] slides = {
-            // Each slide: { title, line1, line2, line3, ... }
+            {
+                    "Victory",
+                    "The Shark falls to his knees.",
+                    "",
+                    "His spit dries on the concrete.",
+                    "The Marina goes silent.",
+                    "",
+                    "Nadav stands tall under the golden sunset."
+            },
+            {
+                    "The Golden Amba",
+                    "The legendary Golden Amba gleams",
+                    "in Nadav's hands.",
+                    "",
+                    "Its warmth spreads through the air.",
+                    "The scent of cumin and fenugreek",
+                    "fills the streets of Ashkelon."
+            },
+            {
+                    "A City Reborn",
+                    "Word travels fast through the shchuna.",
+                    "",
+                    "Miri raises her laffa in salute.",
+                    "Abu Rafi nods with a knowing smile.",
+                    "Tzion gives everyone free haircuts.",
+                    "",
+                    "Even Yotam from Tel Aviv stays."
+            },
+            {
+                    "The Prince Returns",
+                    "Shirel texts him that night.",
+                    "",
+                    "'I made a mistake.'",
+                    "",
+                    "Nadav reads it, smiles,",
+                    "and blocks her number.",
+                    "",
+                    "He has a city to run."
+            },
             {
                     "AshkeLord",
-                    "The Legend of the Golden Chai",
+                    "From the dusty corners of the periphery,",
+                    "a legend was born.",
                     "",
-                    "A tale of honor, heartbreak,",
-                    "and the quest for the ultimate drip."
+                    "Not with money. Not with violence.",
+                    "But with honor, shawarma,",
+                    "and the sickest fade in all of Israel.",
+                    "",
+                    "Long live the AshkeLord."
             },
             {
-                    "The Streets of Ashkelon",
-                    "In the sun-baked streets of Ashkelon,",
-                    "honor is everything.",
+                    "Credits",
+                    "Thank you for playing!",
                     "",
-                    "Where concrete meets the sea,",
-                    "legends are forged in gold chains",
-                    "and the roar of Honda Civics."
-            },
-            {
-                    "The Prince",
-                    "Nadav \"The Prince\" Biton.",
+                    "AshkeLord",
+                    "A 2D RPG built from scratch in Java",
                     "",
-                    "Once the proudest rider in the neighborhood.",
-                    "His electric bike gleamed under the sunset.",
-                    "His girl, Shirel, was the envy of every corner."
-            },
-            {
-                    "The Darkest Morning",
-                    "But one morning, everything changed.",
+                    "Made with passion and pita.",
                     "",
-                    "His electric bike's battery... stolen.",
-                    "And Shirel? Gone.",
-                    "",
-                    "She left him for his arch-nemesis..."
-            },
-            {
-                    "The Shark",
-                    "Liran \"The Shark\" - ruler of the Marina.",
-                    "",
-                    "With his blacked-out Honda Civic",
-                    "and his iron grip on the waterfront,",
-                    "he took everything from Nadav.",
-                    "",
-                    "Everything."
-            },
-            {
-                    "Your Destiny Awaits",
-                    "Reclaim your honor.",
-                    "Earn your Street Cred.",
-                    "Defeat The Shark.",
-                    "",
-                    "Become the AshkeLord.",
-                    "",
-                    "                    ...Yalla, let's go."
+                    "              Yalla, bye."
             }
     };
 
     // --- State ---
     private int currentSlide = 0;
-    private int typewriterIndex = 0; // Characters revealed so far
-    private int totalCharsInSlide = 0; // Total characters in current slide body
-    private long lastCharTime = 0; // Timestamp for typewriter pacing
-    private static final long CHAR_DELAY_MS = 35; // Milliseconds per character
+    private int typewriterIndex = 0;
+    private int totalCharsInSlide = 0;
+    private long lastCharTime = 0;
+    private static final long CHAR_DELAY_MS = 40; // Slightly slower for dramatic effect
 
     private boolean slideFullyRevealed = false;
     private long promptBlinkTimer = 0;
     private boolean promptVisible = true;
 
-    private boolean enterWasPressed = false; // Debounce for enter key
+    private boolean enterWasPressed = false;
 
-    // Background image
     private BufferedImage bgImage;
 
-    public PrologueState(Game game) {
+    public EpilogueState(Game game) {
         super(game);
+        // Stop gameplay music before the ending cinematic
+        com.ashkelord.audio.AudioManager.getInstance().stopMusic();
         loadBackground();
         prepareSlide();
     }
 
     private void loadBackground() {
         try {
-            bgImage = ImageIO.read(getClass().getResourceAsStream("/textures/prologue_bg.jpg"));
+            // Try epilogue-specific bg, fall back to prologue bg
+            bgImage = ImageIO.read(getClass().getResourceAsStream("/textures/epilogue_bg.jpg"));
         } catch (Exception e) {
-            System.err.println("Warning: Could not load prologue background. Using solid color.");
-            bgImage = null;
+            try {
+                bgImage = ImageIO.read(getClass().getResourceAsStream("/textures/prologue_bg.jpg"));
+            } catch (Exception e2) {
+                System.err.println("Warning: Could not load epilogue background. Using solid color.");
+                bgImage = null;
+            }
         }
     }
 
@@ -126,7 +141,6 @@ public class PrologueState extends State {
         slideFullyRevealed = false;
         lastCharTime = System.currentTimeMillis();
 
-        // Count total body characters (skip title at index 0)
         totalCharsInSlide = 0;
         String[] slide = slides[currentSlide];
         for (int i = 1; i < slide.length; i++) {
@@ -159,15 +173,14 @@ public class PrologueState extends State {
         boolean enterPressed = game.getKeyManager().enter;
         if (enterPressed && !enterWasPressed) {
             if (!slideFullyRevealed) {
-                // Skip typewriter — reveal full text instantly
                 typewriterIndex = totalCharsInSlide;
                 slideFullyRevealed = true;
             } else {
-                // Advance to next slide
                 currentSlide++;
                 if (currentSlide >= slides.length) {
-                    // Prologue finished — transition to gameplay
-                    game.getStateManager().swap(new GameState(game));
+                    // Epilogue finished — return to title / close game
+                    System.out.println("=== THE END ===");
+                    System.exit(0);
                     return;
                 }
                 prepareSlide();
@@ -183,15 +196,14 @@ public class PrologueState extends State {
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        // Background image (scaled to fill) + dark overlay for text readability
+        // Background
         if (bgImage != null) {
-            // Zoom in ~10%: crop center of source image for tighter framing
-            int zoomPx = (int) (bgImage.getWidth() * 0.075); // 7.5% from each side = 15% zoom
+            int zoomPx = (int) (bgImage.getWidth() * 0.075);
             int zoomPy = (int) (bgImage.getHeight() * 0.075);
             g2.drawImage(bgImage,
-                    0, 0, game.width, game.height, // destination (full screen)
-                    zoomPx, zoomPy, // source top-left (cropped)
-                    bgImage.getWidth() - zoomPx, bgImage.getHeight() - zoomPy, // source bottom-right
+                    0, 0, game.width, game.height,
+                    zoomPx, zoomPy,
+                    bgImage.getWidth() - zoomPx, bgImage.getHeight() - zoomPy,
                     null);
             g2.setColor(BG_OVERLAY);
             g2.fillRect(0, 0, game.width, game.height);
@@ -201,20 +213,19 @@ public class PrologueState extends State {
         }
 
         // Decorative gold line at top
-        g2.setColor(GOLD_DIM);
+        g2.setColor(GOLD);
         g2.fillRect(0, 0, game.width, 3);
 
         String[] slide = slides[currentSlide];
         String title = slide[0];
 
-        // --- Render Title (always fully visible) ---
+        // --- Render Title ---
         g2.setFont(TITLE_FONT);
         FontMetrics titleFm = g2.getFontMetrics();
         int titleX = (game.width - titleFm.stringWidth(title)) / 2;
         int titleY;
 
         if (currentSlide == 0) {
-            // First slide: title centered vertically, larger presence
             titleY = game.height / 3;
         } else {
             titleY = 80;
@@ -227,24 +238,24 @@ public class PrologueState extends State {
         g2.setColor(GOLD);
         g2.drawString(title, titleX, titleY);
 
-        // --- Subtitle on first slide ---
+        // --- Victory subtitle on first slide ---
         if (currentSlide == 0) {
             g2.setFont(SUBTITLE_FONT);
             FontMetrics subFm = g2.getFontMetrics();
-            String subtitle = slide[1];
+            String subtitle = "The Shark Has Been Defeated";
             int subX = (game.width - subFm.stringWidth(subtitle)) / 2;
-            g2.setColor(GOLD_DIM);
+            g2.setColor(VICTORY_GOLD);
             g2.drawString(subtitle, subX, titleY + 40);
         }
 
-        // --- Render Body Text (typewriter effect) ---
+        // --- Render Body Text (typewriter) ---
         g2.setFont(BODY_FONT);
         FontMetrics bodyFm = g2.getFontMetrics();
         int lineHeight = bodyFm.getHeight() + 6;
         int startY = (currentSlide == 0) ? titleY + 80 : 130;
         int charsRemaining = typewriterIndex;
 
-        int bodyStartIdx = (currentSlide == 0) ? 2 : 1; // Skip subtitle on first slide
+        int bodyStartIdx = (currentSlide == 0) ? 2 : 1;
         for (int i = bodyStartIdx; i < slide.length; i++) {
             String line = slide[i];
             int lineY = startY + (i - bodyStartIdx) * lineHeight;
@@ -262,10 +273,6 @@ public class PrologueState extends State {
             }
 
             int lineX = (game.width - bodyFm.stringWidth(line)) / 2;
-            // Adjust for partially revealed lines
-            if (!visiblePart.equals(line)) {
-                lineX = (game.width - bodyFm.stringWidth(line)) / 2;
-            }
 
             // Shadow
             g2.setColor(SHADOW);
@@ -281,7 +288,7 @@ public class PrologueState extends State {
             FontMetrics promptFm = g2.getFontMetrics();
             String prompt;
             if (currentSlide == slides.length - 1) {
-                prompt = "[ Press ENTER to begin your journey ]";
+                prompt = "[ Press ENTER to close ]";
             } else {
                 prompt = "[ Press ENTER to continue ]";
             }
@@ -293,7 +300,7 @@ public class PrologueState extends State {
         }
 
         // Decorative gold line at bottom
-        g2.setColor(GOLD_DIM);
+        g2.setColor(GOLD);
         g2.fillRect(0, game.height - 3, game.width, 3);
     }
 }

@@ -2,16 +2,27 @@ package com.ashkelord.entities.behaviors;
 
 import java.awt.image.BufferedImage;
 import com.ashkelord.gfx.Assets;
+import com.ashkelord.combat.Attack;
+import com.ashkelord.combat.MeleeAttack;
+import com.ashkelord.combat.AoEAttack;
 
 /**
  * The second evolution form — Intermediate Ars.
- * Faster speed, stronger attack.
+ * Faster speed, melee primary + AoE special.
  */
 public class IntermediateArsForm implements EvolutionForm {
 
+    private final Attack primaryAttack = new MeleeAttack("Slap", 10, 0.5f);
+    private final Attack specialAttack = new AoEAttack("Techno Music", 15, 3.0f, 96);
+
     @Override
-    public void attack() {
-        System.out.println("Used Techno Music!");
+    public Attack getPrimaryAttack() {
+        return primaryAttack;
+    }
+
+    @Override
+    public Attack getSpecialAttack() {
+        return specialAttack;
     }
 
     @Override

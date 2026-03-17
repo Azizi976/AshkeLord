@@ -7,9 +7,12 @@ public class KeyManager implements KeyListener {
 
     private boolean[] keys;
     public boolean up, down, left, right;
-    public boolean enter, space;
+    public boolean enter, space, shift, qKey, escape;
 
     public boolean enterJustPressed;
+    public boolean spaceJustPressed;
+    public boolean shiftJustPressed;
+    public boolean qJustPressed;
     private boolean[] justPressed;
     private boolean[] cantPress;
 
@@ -38,13 +41,18 @@ public class KeyManager implements KeyListener {
         right = keys[KeyEvent.VK_D] || keys[KeyEvent.VK_RIGHT];
         enter = keys[KeyEvent.VK_ENTER];
         space = keys[KeyEvent.VK_SPACE];
+        shift = keys[KeyEvent.VK_SHIFT];
+        qKey = keys[KeyEvent.VK_Q];
         
-        if (keyJustPressed(KeyEvent.VK_ENTER)) {
-            enterJustPressed = true;
-        } else {
-            enterJustPressed = false;
-        }
+        enterJustPressed = keyJustPressed(KeyEvent.VK_ENTER);
+        spaceJustPressed = keyJustPressed(KeyEvent.VK_SPACE);
+        shiftJustPressed = keyJustPressed(KeyEvent.VK_SHIFT);
+        qJustPressed = keyJustPressed(KeyEvent.VK_Q);
+        escape = keys[KeyEvent.VK_ESCAPE];
     }
+    
+    public boolean isEscape() { return escape; }
+    public boolean isSpaceJustPressed() { return spaceJustPressed; }
     
     public boolean keyJustPressed(int keyCode){
         if(keyCode < 0 || keyCode >= keys.length)

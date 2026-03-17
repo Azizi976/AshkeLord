@@ -42,4 +42,16 @@ public class Animation {
         index = 0;
         timer = 0;
     }
+    
+    /** Change the animation speed (ms per frame). */
+    public void setSpeed(int speed) { this.speed = speed; }
+    
+    /** Get current speed (ms per frame). */
+    public int getSpeed() { return speed; }
+    
+    /** Get total number of frames. */
+    public int getFrameCount() { return frames.length; }
+    
+    /** Check if currently on the last frame (useful for one-shot animations). */
+    public boolean isLastFrame() { return index >= frames.length - 1; }
 }

@@ -9,6 +9,7 @@ public class Assets {
 
     // Player (Nadav)
     public static BufferedImage[][] player_walk; // [dir][frame]
+    public static BufferedImage[][] player_bald_walk; // [dir][frame]
 
     // NPCs
     public static BufferedImage[][] savta_walk; // [dir][frame]
@@ -42,6 +43,7 @@ public class Assets {
     
     // Spitting
     public static BufferedImage[] player_spit;
+    public static BufferedImage[] player_bald_spit;
     public static BufferedImage spit_projectile;
     public static BufferedImage liran_boss;
 
@@ -152,5 +154,20 @@ public class Assets {
         player_spit[3] = sheet.crop(W * 3, spitRow, W, H); // Right
         
         spit_projectile = sheet.crop(W * 4, spitRow, W, H);
+
+        // Bald Player Walk: rows 12-15
+        player_bald_walk = new BufferedImage[4][4];
+        for (int dir = 0; dir < 4; dir++) {
+            for (int frame = 0; frame < 4; frame++) {
+                player_bald_walk[dir][frame] = sheet.crop(frame * W, (12 + dir) * H, W, H);
+            }
+        }
+
+        // Bald Player Spit: row 16
+        int baldSpitRow = 16 * H;
+        player_bald_spit = new BufferedImage[4];
+        for (int i = 0; i < 4; i++) {
+            player_bald_spit[i] = sheet.crop(i * W, baldSpitRow, W, H);
+        }
     }
 }

@@ -5,8 +5,12 @@ import com.ashkelord.entities.creatures.Player;
 import com.ashkelord.entities.creatures.SocialNPC;
 import com.ashkelord.entities.npcs.NPC;
 import com.ashkelord.gfx.Assets;
+import com.ashkelord.gfx.Renderer;
 import com.ashkelord.main.Game;
 import com.ashkelord.worlds.World;
+import com.ashkelord.worlds.Portal;
+import com.ashkelord.worlds.PortalManager;
+import com.ashkelord.tiles.Tile;
 import java.awt.Graphics;
 
 import com.ashkelord.ui.HUD;
@@ -18,12 +22,14 @@ public class GameState extends State {
     private Player player;
     private HUD hud;
     private QuestManager questManager;
+    private PortalManager portalManager;
 
     public GameState(Game game) {
         super(game);
 
         world = new World(game, "/maps/world1.txt");
         hud = new HUD();
+        portalManager = new PortalManager();
         
         // Quests
         questManager = new QuestManager(game);
@@ -181,8 +187,9 @@ public class GameState extends State {
                             "Tzion: Now you look like a KING, not a nebech.",
                             "Tzion: Here's a tip about The Shark...",
                             "Tzion: He meets his guys at the port warehouse. Every Friday.",
-                            "+10 Charisma! +15 Street Creds! +Strong Hold Wax!"
+                            "+10 Charisma! +15 Street Creds! + Strong Hold Wax!"
                         });
+                        player.setBald(true);
                         q.complete();
                     } else {
                         game.getUIManager().getDialogBox().show("Tzion: Nu? Did you find Avi yet? He hangs out near the walls.");
@@ -260,6 +267,9 @@ public class GameState extends State {
         };
         world.getEntityManager().addEntity(yotam);
 
+        // Start background music
+        com.ashkelord.audio.AudioManager.getInstance().playMusic("bgm_main");
+
         game.getUIManager().getDialogBox().show("Welcome to Ashkelon! Watch out for traffic!");
     }
 
@@ -267,10 +277,23 @@ public class GameState extends State {
     public void tick() {
         world.tick();
         questManager.tick();
+        
+        // Portal check
+        int ptx = (int) (player.getX() + player.getWidth() / 2) / Tile.TILEWIDTH;
+        int pty = (int) (player.getY() + player.getHeight() / 2) / Tile.TILEHEIGHT;
+        Portal p = portalManager.checkTrigger(ptx, pty);
+        if (p != null) {
+            loadWorld(p.getTargetWorldPath());
+            player.setX(p.getDestSpawnX() * Tile.TILEWIDTH);
+            player.setY(p.getDestSpawnY() * Tile.TILEHEIGHT);
+        }
     }
 
     // World Switching
     public void loadWorld(String path) {
+        // Clear portals from previous world
+        portalManager.clear();
+        
         // Save player stats/inventory if needed (here just transferring reference)
         world = new World(game, path);
         
@@ -460,6 +483,7 @@ public class GameState extends State {
                             "Tzion: He meets his guys at the port warehouse. Every Friday.",
                             "+10 Charisma! +15 Street Creds! +Strong Hold Wax!"
                         });
+                        player.setBald(true);
                         q.complete();
                     } else {
                         game.getUIManager().getDialogBox().show("Tzion: Nu? Did you find Avi yet? He hangs out near the walls.");
@@ -671,8 +695,10 @@ public class GameState extends State {
     }
 
     @Override
-    public void render(Graphics g) {
+    public void render(Renderer r) {
+        Graphics g = r.getRawGraphics();
         world.render(g);
+        questManager.render(g);
         if (game.getUIManager() != null) {
             game.getUIManager().render(g);
         }
@@ -690,5 +716,13 @@ public class GameState extends State {
     
     public QuestManager getQuestManager() {
         return questManager;
+    }
+    
+    public PortalManager getPortalManager() {
+        return portalManager;
+    }
+    
+    public Player getPlayer() {
+        return player;
     }
 }

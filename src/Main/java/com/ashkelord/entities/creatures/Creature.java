@@ -110,6 +110,18 @@ public abstract class Creature extends Entity {
     public void setWorld(World world) {
         this.world = world;
     }
+    
+    public World getWorld() {
+        return world;
+    }
+    
+    public void setXMove(float xMove) {
+        this.xMove = xMove;
+    }
+    
+    public void setYMove(float yMove) {
+        this.yMove = yMove;
+    }
 
     public void hurt(int amt) {
         health -= amt;

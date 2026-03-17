@@ -2,9 +2,9 @@
 
 A 2D Java game built from scratch using Java AWT/Swing.
 
-## Project Structure
+## Project Structure 📁
 
-```
+```text
 src/
 ├── main/
 │   ├── java/com/ashkelord/
@@ -25,27 +25,27 @@ src/
 │       ├── sounds/        — Audio files
 │       ├── maps/          — Level & world data
 │       └── fonts/         — Custom fonts
-└── test/
-    └── java/com/ashkelord/ — Unit tests
 ```
 
-## Build & Run
+## Build & Run 🚀
 
 ### Prerequisites
-- Java 17+
-- Gradle (or use the Gradle wrapper)
+- **Java 17+**
+- **Gradle** (or make sure you use a built-in wrapper `gradlew`)
 
-### Run the game
+### Quick Start
+To launch the game from the command line, simply run:
 ```bash
-gradle run
+java -cp "out;src/main/resources" com.ashkelord.main.Launcher
 ```
 
-### Build a JAR
+*Note: Ensure classes are compiled to `/out` via `javac` beforehand.*
+
+### Building via Gradle
 ```bash
 gradle build
 ```
-
-The compiled JAR will be in `build/libs/`.
+The compiled JAR will be generated in `build/libs/`.
 
 ## License
 

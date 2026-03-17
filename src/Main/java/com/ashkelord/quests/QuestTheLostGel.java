@@ -59,6 +59,8 @@ public class QuestTheLostGel extends Quest {
             player.addCharisma(10);
             player.addStreetCreds(15);
             player.getInventory().addItem(com.ashkelord.items.Item.strongHoldWaxItem.createNew(1));
+            // Tzion uses the wax for the haircut — remove from inventory
+            player.getInventory().removeItem(com.ashkelord.items.Item.strongHoldWaxItem.getId());
         }
     }
 
