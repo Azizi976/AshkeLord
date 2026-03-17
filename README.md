@@ -7,17 +7,15 @@ The game follows **Nadav**, a hero from Ashkelon whose life got turned upside do
 To restore his lost honor and win back Shirel's love, Nadav embarks on a journey across Ashkelon, trying to gather "Street Creds" and become the **AshkeLord**.
 
 Nadav's journey is divided into several main Quests:
+- **The Sacred Shawarma:** Miri demands Nadav find the legendary "Golden Amba" located at the Ashkelon Port in exchange for a heavy Laffa to restore his strength.
 - **The Lost Gel:** Tzion the Barber lost his Strong Hold Wax to Avi, the gym bully. Nadav must intimidate Avi and return the gel to Tzion in exchange for a fresh haircut (going bald).
 - **Escape from Periphery:** Escorting Yotam, the nerdy Tel-Avivian, through the "Keter Chair Maze". Nadav must protect Yotam and evade tracksuited "Arsim" trying to rob him. Reward: Oat Milk Cortado that gives a speed boost.
-- **The Sacred Shawarma:** Miri demands Nadav find the legendary "Golden Amba" located at the Ashkelon Port in exchange for a heavy Laffa to restore his strength.
 - **The Final Spit:** The ultimate showdown against Liran The Shark. A boss fight in a closed arena for a spitting duel, to earn the Golden Amba and the title of "AshkeLord".
 
 ## 🎮 Gameplay & Controls
 - **Movement:** `W, A, S, D` keys or Arrow Keys (`Up, Down, Left, Right`).
 - **Interaction (Talking to NPCs & Advancing dialog):** `Enter` key.
 - **Primary Attack (Spit / Melee):** `Space` key.
-- **Secondary Attack:** `Shift` key.
-- **Special Attack (Unlocked later - e.g. Techno Music AoE damage):** `Q` key.
 
 ### Core Mechanics:
 - **Evolution System:** At a certain point, as Nadav gathers enough "Street Creds" and finds special items (like an E-Bike Battery), he evolves from a "Baby Ars" to an "Intermediate Ars". Each evolution changes his appearance, grants a permanent speed multiplier, and unlocks new attacks.
