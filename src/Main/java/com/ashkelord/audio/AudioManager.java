@@ -1,7 +1,6 @@
 package com.ashkelord.audio;
 
 import javax.sound.sampled.*;
-import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,14 +36,19 @@ public class AudioManager {
         soundRegistry.put(id, resourcePath);
     }
 
-    /** Play a one-shot SFX. Does nothing if the sound isn't registered or file missing. */
+    /**
+     * Play a one-shot SFX. Does nothing if the sound isn't registered or file
+     * missing.
+     */
     public void playSound(String id) {
         String path = soundRegistry.get(id);
-        if (path == null) return;
+        if (path == null)
+            return;
 
         try {
             URL url = getClass().getResource(path);
-            if (url == null) return; // File not found — silent no-op
+            if (url == null)
+                return; // File not found — silent no-op
 
             AudioInputStream ais = AudioSystem.getAudioInputStream(url);
             Clip clip = AudioSystem.getClip();
@@ -72,16 +76,19 @@ public class AudioManager {
 
     /** Play looping background music. Stops any currently playing BGM. */
     public synchronized void playMusic(String id) {
-        if (id.equals(currentMusicId)) return; // Already playing
+        if (id.equals(currentMusicId))
+            return; // Already playing
 
         stopMusic();
 
         String path = soundRegistry.get(id);
-        if (path == null) return;
+        if (path == null)
+            return;
 
         try {
             URL url = getClass().getResource(path);
-            if (url == null) return;
+            if (url == null)
+                return;
 
             AudioInputStream ais = AudioSystem.getAudioInputStream(url);
             currentMusic = AudioSystem.getClip();
@@ -129,7 +136,8 @@ public class AudioManager {
 
     /** Convert 0.0–1.0 linear volume to decibel scale. */
     private float volumeToDecibels(float volume) {
-        if (volume <= 0f) return -80f; // Effectively mute
+        if (volume <= 0f)
+            return -80f; // Effectively mute
         return 20f * (float) Math.log10(volume);
     }
 }
